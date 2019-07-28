@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { OnChange } from 'property-watch-decorator';
+import { Subject } from 'rxjs';
+import { debounceTime, distinctUntilChanged, takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-input',
@@ -14,7 +24,7 @@ import { OnChange } from 'property-watch-decorator';
   styleUrls: ['./input.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class InputComponent {
+export class InputComponent implements OnInit, OnDestroy {
   /**
    * Placeholder will bind to input element the native placeholder property
    */
@@ -68,8 +78,52 @@ export class InputComponent {
   @OnChange(function() {
     if (this.form) {
       this.control = this.form.get(String(this.controlName)) as FormControl;
+      this.listenToInput();
     }
   })
   @Input()
   controlName: string;
+
+  /**
+   *
+   * InputValue will emit control value when it changes
+   *
+   */
+  @Output() inputValue = new EventEmitter<string | boolean>();
+
+  private readonly destroy$ = new Subject();
+
+  /**
+   *
+   * Control typing debounce time
+   *
+   */
+  private debounce = 300;
+
+  ngOnInit() {
+    this.listenToInput();
+  }
+
+  /**
+   *
+   * Emits control value when it changes
+   *
+   */
+  private listenToInput(): void {
+    if (!this.control) {
+      return;
+    }
+    this.control.valueChanges
+      .pipe(
+        takeUntil(this.destroy$),
+        debounceTime(this.debounce),
+        distinctUntilChanged()
+      )
+      .subscribe(value => this.inputValue.emit(value));
+  }
+
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

@@ -1,3 +1,4 @@
+import { action } from '@storybook/addon-actions';
 import { InputComponent } from './input.component';
 import { storiesOf, moduleMetadata } from '@storybook/angular';
 import {
@@ -42,10 +43,10 @@ storiesOf('Atoms | Input', module)
     template: `
       <div class="story-container">
         <h3>Form Control</h3>
-        <app-input [control]="control"></app-input>
+        <app-input (inputValue)="controlEvent($event)" [control]="control"></app-input>
         <span> {{ control.value | json }}</span>
         <h3>Form Group</h3>
-        <app-input [form]="form" [controlName]="controlName"></app-input>
+        <app-input (inputValue)="formEvent($event)" [form]="form" [controlName]="controlName"></app-input>
         <span> {{ form.value | json }}</span>
       </div>
     `,
@@ -53,9 +54,11 @@ storiesOf('Atoms | Input', module)
       control: new FormControl('Form control value'),
       form: new FormGroup({
         example: new FormControl('From controlName'),
-        other: new FormControl('From controlName')
+        other: new FormControl('From controlName other')
       }),
-      controlName: 'example'
+      controlName: 'example',
+      controlEvent: action('Form control value'),
+      formEvent: action('Form controlName value')
     },
     styles: [
       `
