@@ -8092,6 +8092,11 @@ property-information@^5.0.1:
   dependencies:
     xtend "^4.0.1"
 
+property-watch-decorator@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/property-watch-decorator/-/property-watch-decorator-1.2.5.tgz#ac2429d318002a37eb3ba805f1f08af94b2f35ab"
+  integrity sha512-x6u0eDm47pTWf02Mjj54zZx1HuvKeSXT8KK18NDpoA070SgDpcFEjlpC1tAdWPx2XNKB10edkuCuAl9287n0Kg==
+
 protoduck@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/protoduck/-/protoduck-5.0.1.tgz#03c3659ca18007b69a50fd82a7ebcc516261151f"
