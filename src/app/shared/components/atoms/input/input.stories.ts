@@ -1,6 +1,6 @@
 import { InputComponent } from './input.component';
 import { storiesOf, moduleMetadata } from '@storybook/angular';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 
 const metadata = moduleMetadata({
   declarations: [InputComponent],
@@ -32,20 +32,24 @@ storiesOf('Atoms | Input', module)
       }
     `
     ]
+  }))
+  .add('Integrate with form', () => ({
+    template: `
+      <div class="story-container">
+        <h3>Form Control</h3>
+        <app-input [control]="control"></app-input>
+        <span> {{ control.value | json }}</span>
+      </div>
+    `,
+    props: {
+      control: new FormControl('Form control value')
+    },
+    styles: [
+      `
+    .story-container {
+      padding-left: 3rem;
+      padding-top: 1rem;
+    }
+  `
+    ]
   }));
-// .add('Integrate with form', () => ({
-//   template: `
-//     <div class="story-container">
-//       <h3>Form Control</h3>
-//       <app-input></app-input>
-//     </div>
-//   `,
-//   styles: [
-//     `
-//     .story-container {
-//       padding-left: 3rem;
-//       padding-top: 1rem;
-//     }
-//   `
-//   ]
-// }));
