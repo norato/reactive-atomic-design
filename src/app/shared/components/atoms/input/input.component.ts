@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, FormGroup } from '@angular/forms';
 import { OnChange } from 'property-watch-decorator';
 
 @Component({
@@ -56,4 +56,20 @@ export class InputComponent {
    */
   @Input()
   control: FormControl = new FormControl('');
+
+  /**
+   * Form integrate to a parent form
+   */
+  @Input() form: FormGroup;
+
+  /**
+   * ControlName is the string name from a formControlName of the parent form
+   */
+  @OnChange(function() {
+    if (this.form) {
+      this.control = this.form.get(String(this.controlName)) as FormControl;
+    }
+  })
+  @Input()
+  controlName: string;
 }
